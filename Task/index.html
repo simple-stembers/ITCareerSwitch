@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GeoNames API Task</title>
+    <meta name="Author" content="Stephen Chambers">
+    <meta name="Description" content="GeoNames API Task">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+
+  </head>
+  <body>
+    <div class="header">
+        <h1>GeoNames API Task</h1>
+    </div>
+    <div class="main">
+        <table class="table table-bordered">
+        <tr>
+            <td>Oceans API</td>
+            <td>
+                <p>Please insert a longitude and latitude into the fields, and the ocean corresponding to that co-ordinates will be shown in the results box below. The co-ordinates are values of degrees, for longitude they range from -180 to 180, and for latitude they range from -90 to 90.</p>
+                <br>
+                Longitude: <input type="number" id="oceanLng" min="-180" max="180" /><br>
+                Latitude: <input type="number" id="oceanLat" min="-90" max="90" />
+            </td>
+            <td>
+                <button id="oceanRun">Run</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Earthquakes API</td>
+            <td>
+                <p>Please insert 4 co-ordinates for North, South, East and West. These will create a bounded area, and the largest 3 earthquakes will be shown in the results box below.</p>
+                <br>
+                North: <input type="number" id="eqNorth" step="0.01" min="-90" max="90" /><br>
+                South: <input type="number" id="eqSouth" step="0.01" min="-90" max="90" /><br>
+                East: <input type="number" id="eqEast" step="0.01" min="-180" max="180" /><br>
+                West: <input type="number" id="eqWest" step="0.01" min="-180" max="180" /><br>
+            </td>
+            <td>
+                <button id="eqRun">Run</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Weather API</td>
+            <td>
+                <p>Please choose a location from the locations below, and the weather for that location will be shown in the results box below.</p>
+                <br>
+                <select id="ICAO">
+                    <option value="">Select a location</option>
+                    <option value="EGLL">London, UK</option>
+                    <option value="KJFK">New York, USA</option>
+                    <option value="EDDF">Frankfurt, Germany</option>
+                    <option value="LFPG">Paris, France</option>
+                    <option value="LIRF">Rome, Italy</option>
+                    <option value="EKCH">Copenhagen, Denmark</option>
+                    <option value="EHAM">Amsterdam, Netherlands</option>
+                    <option value="LEMD">Madrid, Spain</option>
+                    <option value="LSZH">Zurich, Switzerland</option>
+                </select>
+                <br>
+            </td>
+            <td>
+                <button id="weatherRun">Run</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <h3 id="results"> Results</h3>
+                <h4 id = "oceanName"></h4>
+                <h4 id = "eqResults"></h4>
+                <h4 id = "weatherResults"></h4>
+               
+            </td>
+        </tr>
+        </table>
+    </div>
+
+    <div class="preloader"></div>
+    
+    <script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
+	<script type="application/javascript" src="libs/js/script.js"></script>
+  </body>
+</html>

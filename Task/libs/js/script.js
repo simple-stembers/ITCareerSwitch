@@ -111,10 +111,9 @@ $('#eqRun').click(function() {
 
 				if (result.status.name == "ok") {
 
-					// Create an unordered list HTML element
 						const ul = document.createElement('ul');
 
-					// Add list items to the unordered list
+					
 						ul.innerHTML = `
 						<li>Station Name: ${result.data.stationName}</li>
 						<li>Datetime: ${result.data.datetime}</li>
@@ -124,7 +123,7 @@ $('#eqRun').click(function() {
 						<li>Humidity: ${result.data.humidity}%</li>
 						`;
 
-					// Append the unordered list to the desired HTML element
+					
 						document.getElementById('weatherResults').appendChild(ul);
 											
 

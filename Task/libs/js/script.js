@@ -111,6 +111,7 @@ $('#eqRun').click(function() {
 
 				if (result.status.name == "ok") {
 
+					
 						const ul = document.createElement('ul');
 
 					

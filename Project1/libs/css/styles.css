@@ -1,17 +1,42 @@
 #map    {
-    height: 400px;
-    width : 600px;
+    height: 94%;
+    width: 100%;
 }
 
 body {
     padding: 0;
     margin: 0;
 }
-html, body, #map {
+html, body{
     height: 100%;
     width: 100vw;
+    margin: 0;
+    overflow: hidden;
 }
 
+#header{
+    height: 6%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+.navbar {
+  background-color: transparent;
+  max-width: 20vw;
+  border: none;
+  margin-right: 20px;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+}
+
+#header h1{
+  text-align: center;
+  width: 100%
+}
 h1{
     text-align: center;
 }
@@ -20,3 +45,200 @@ h1{
 #map .leaflet-interactive {
     transition: opacity 0.4s, fill-opacity 0.4s;
   }
+
+
+/* Style the modal overlay */
+#modal-overlay {
+    position: fixed;
+    top: 25%;
+    width: 40% !important;
+    height: 60% !important;
+    background-color: rgba(59, 193, 255, 0.5);
+    /*background-color: 'green';*/
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.8s, visibility 0.8s;
+    z-index: 1000 !important;
+    will-change: opacity;
+  }
+
+  #modal-overlay.show {
+    
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.8s;
+  }
+  
+  
+  /* Position the modal content on the right side */
+  #modal-overlay.right-modal {
+    right: 0;
+    left:auto;
+    
+  }
+
+  /* Position the modal content on the left side */
+  #modal-overlay.left-modal {
+    left: 0;
+    right:auto;
+    
+  }
+  /* Style the modal content */
+  .modal-content {
+    top: 2%;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+    padding: 0px;
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+    }
+  
+    .modal-heading {
+        position: relative;
+        background-color: transparent; /* or any other background color */
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+  /* Style the close button */
+  .close-modal {
+    position: absolute;
+    background-color: transparent;
+    color: #333;
+    top: 10px;
+    right: 10px;
+    font-size: 36px;
+    border: transparent;
+    cursor: pointer;
+  }
+  
+  /* Style the modal body */
+  .tab-content { 
+    height: 80%;
+    padding: 10px;
+    padding-top:0px;
+    margin-top:0px;
+    overflow-y: auto;
+    
+  }
+  
+  .nav-tabs {
+    margin-bottom: 10px;
+  }
+  
+  .nav-tabs li {
+    margin-bottom: 5px;
+  }
+  
+  
+
+  .tab-pane {
+    overflow-y: auto;
+    max-height: 90%;
+    height: 100%
+  }
+
+  .wiki-iframe {
+    border: none;
+    height: 98%;
+    width: 100%;
+  }
+
+#countryFlag {
+  display: block;
+  margin: 0 auto;
+
+}
+#wikiResults {
+  height: 100%;
+  
+}
+
+#homeMoney {
+  background-color: rgba(230, 245, 252, 0.7);
+}
+
+
+@media only screen and (max-width: 768px) {
+  /* Center the modal overlay on smaller screens */
+  #modal-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(12.5%, -50%);
+    min-width: 80vw; /* use viewport width instead of percentage */
+    min-height: 80vh; /* use viewport height instead of percentage */
+    max-width: 80vw;
+    max-height: 80vh;
+  }
+  
+  /* Remove the left and right positioning classes */
+  #modal-overlay.right-modal, #modal-overlay.left-modal {
+    left: auto;
+    right: auto;
+  }
+}
+
+.weather-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-around;
+  
+}
+
+.weather-box {
+  background-color:rgba(230, 245, 252, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width:200px;
+  height: 350px;
+  margin: 10px;
+
+}
+
+.weather-box img {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+}
+
+.weather-box h4 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.weather-box p {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.poi-details {
+  display: none;
+}
+
+.popup-text {
+  font-size: 18px; 
+}
+
+#POIs li{
+  cursor: pointer;
+}
+
+.poi-details{
+  display: block;
+  opacity:0;
+  max-height: 0;
+  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+.poi-details.expanded {
+  display: block;
+  opacity: 1;
+  max-height: 100px; /* adjust this value to your desired height */
+  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}

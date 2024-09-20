@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Traveller's Companion</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
@@ -22,11 +22,38 @@
    
   </head>
   <body>
-    <h1>Traveller's Companion</h1>
-    <div id="map"></div>
+    <div id="header">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Links <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="">Home</a></li>
+                  <li><a href="">The GDQ</a></li>
+                  <li><a href="">API Practice</a></li>
+                  <li><a href="">Project 2</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+     <h1>Traveller's Companion</h1>
+    </div>
+    <div id="map" class="map"></div>
     <script>
        
-       var map = L.map('map').setView([40, 0], 3);
+       var map = L.map('map').locate({setView: true, maxZoom: 8});
        var markerGroup = L.layerGroup().addTo(map);
 
        var maxBounds = L.latLngBounds(
@@ -35,63 +62,65 @@
        );
 
        map.setMaxBounds(maxBounds);
+       map.setMinZoom(3);
 
-       map.on('click', function(e) {
-         
-         markerGroup.clearLayers();
-        
-        var lat = e.latlng.lat;
-         var lng = e.latlng.lng;
-         var marker = L.marker([lat,lng]).addTo(markerGroup);
-         console.log('Clicked at: ' + lat + ', ' + lng);
-       });
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-	      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        
-        fetch('countryBorders.geo.json')
-        .then(response => response.json())
-        .then(data => {
-        var countryBorders = L.geoJSON(data, {
-          style:{
-            weight: 1,
-            color: 'blue',
-            opacity: 0,
-            fillOpacity: 0
-          },
-          onEachFeature: function(feature, layer) {
-            layer.on({
-              mouseover: function() {
-                layer
-               .setStyle({
-                 weight: 2,
-                 color: 'lightblue',
-                 opacity: 0.4,
-                 fillOpacity: 0.4,
-               });
-              
-             },
-              mouseout: function() {
-              layer
-              .setStyle({
-                  weight: 2,
-                  color: 'lightblue',
-                  opacity: 0,
-                  fillOpacity: 0,
-                  
-               });
-               
-              }
-            });
-          }
-        
-       }).addTo(map);
-      })
+     
     </script>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-    <script src="js/bootstrap.min.js"></script>
+    <!-- The modal overlay container -->
+<div id="modal-overlay" class="modal-overlay">
+  <button id="close-modal" class="close-modal">&times;</button>
+  <!-- The modal content -->
+  <div class="modal-content">
+    <!-- The close button -->
+     <div class = "modal-header">
+      <h1 id="countryName"></h1>
+      <img
+        id="countryFlag"
+        src="https://flagcdn.com/ua.svg"
+        width="100"
+        alt="Ukraine">
+      
+     </div>
+    
+    <!-- The modal content goes here -->
+    <ul class="nav nav-tabs" id="modal-tabs">
+      <li class="active"><a href="#demographics" data-toggle="tab">Demographics</a></li>
+      <li><a href="#local-results" data-toggle="tab">Local Results</a></li>
+      <li><a href="#weather" data-toggle="tab">Weather</a></li>
+      <li><a href="#currency" data-toggle="tab">Currency</a></li>
+      <li><a href="#wiki" data-toggle="tab">More Info</a></li>
+    </ul>
+    <!-- Tab content -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="demographics">
+        <div id="capitalCity"></div>
+        <div id="population"></div>
+        <div id="helloResults"></div>
+      </div>
+      <div class="tab-pane" id="local-results">
+        <div id="nearestCity"></div>
+        <div id="POIs">
+          <h4>Here are some local points of interest:</h4>
+        </div>
+      </div>
+      <div class="tab-pane" id="weather">
+        <div id="weatherResults"></div>
+      </div>
+      <div class="tab-pane" id="currency">
+        <div id="currencyResults"></div>
+      </div>
+      <div class="tab-pane" id="wiki">
+        <div id="wikiResults"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
+    <script type="application/javascript" src="libs/js/script.js"></script>
+    <script type="application/javascript" src="libs/js/mapScript.js"></script>
+    <script type="application/javascript" src="libs/js/modalOverlay.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -1,3 +1,5 @@
+
+/* main aspects of the page */
 #map    {
     height: 94%;
     width: 100%;
@@ -35,26 +37,27 @@ html, body{
 
 #header h1{
   text-align: center;
-  width: 100%
+  flex:1;
+  font-size: clamp(24px, 4vw, 40px);
+  
 }
+/* This h1 tag also affects the modal overlay */
 h1{
-    text-align: center;
+  text-align: center;
 }
-
 
 #map .leaflet-interactive {
     transition: opacity 0.4s, fill-opacity 0.4s;
   }
 
 
-/* Style the modal overlay */
+/* The modal overlay styling */
 #modal-overlay {
     position: fixed;
     top: 25%;
-    width: 40% !important;
-    height: 60% !important;
+    width: 40vw ;
+    height: 60vh ;
     background-color: rgba(59, 193, 255, 0.5);
-    /*background-color: 'green';*/
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.8s, visibility 0.8s;
@@ -70,39 +73,35 @@ h1{
   }
   
   
-  /* Position the modal content on the right side */
+  /* Positions the modal content on the right side */
   #modal-overlay.right-modal {
     right: 0;
     left:auto;
     
   }
 
-  /* Position the modal content on the left side */
+  /* Positions the modal content on the left side */
   #modal-overlay.left-modal {
     left: 0;
     right:auto;
     
   }
-  /* Style the modal content */
+  /* Styles the modal content */
   .modal-content {
     top: 2%;
     left: 5%;
     width: 90%;
-    height: 80%;
+    height: 90%;
     padding: 0px;
     box-shadow: none;
     background-color: transparent;
     border: none;
+    display: flex;
+    flex-direction: column;
     }
   
-    .modal-heading {
-        position: relative;
-        background-color: transparent; /* or any other background color */
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-
-  /* Style the close button */
+ 
+  /* Styles the close button */
   .close-modal {
     position: absolute;
     background-color: transparent;
@@ -112,32 +111,45 @@ h1{
     font-size: 36px;
     border: transparent;
     cursor: pointer;
+    z-index: 1002;
   }
   
-  /* Style the modal body */
+  /* Styles the modal body */
+
+
   .tab-content { 
-    height: 80%;
+    height: 75%;
     padding: 10px;
     padding-top:0px;
     margin-top:0px;
     overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    
     
   }
   
   .nav-tabs {
     margin-bottom: 10px;
+    
   }
   
   .nav-tabs li {
     margin-bottom: 5px;
+  
   }
   
   
 
-  .tab-pane {
+  .tab-pane, .tab-pane.active {
     overflow-y: auto;
-    max-height: 90%;
-    height: 100%
+    flex: 1;
+    overflow-x: hidden;
+    text-align: center;
+    justify-content: space-between;
+
   }
 
   .wiki-iframe {
@@ -155,32 +167,11 @@ h1{
   height: 100%;
   
 }
-
+/* Styles the input box for the exhanger */
 #homeMoney {
   background-color: rgba(230, 245, 252, 0.7);
 }
-
-
-@media only screen and (max-width: 768px) {
-  /* Center the modal overlay on smaller screens */
-  #modal-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(12.5%, -50%);
-    min-width: 80vw; /* use viewport width instead of percentage */
-    min-height: 80vh; /* use viewport height instead of percentage */
-    max-width: 80vw;
-    max-height: 80vh;
-  }
-  
-  /* Remove the left and right positioning classes */
-  #modal-overlay.right-modal, #modal-overlay.left-modal {
-    left: auto;
-    right: auto;
-  }
-}
-
+/* This styling is for the weather tab */
 .weather-grid {
   display: flex;
   flex-wrap: wrap;
@@ -220,7 +211,7 @@ h1{
 .poi-details {
   display: none;
 }
-
+/* Styles the text in the pop-up when POI is clicked */
 .popup-text {
   font-size: 18px; 
 }
@@ -228,7 +219,7 @@ h1{
 #POIs li{
   cursor: pointer;
 }
-
+/* Transitions the expandable POI information*/
 .poi-details{
   display: block;
   opacity:0;
@@ -241,4 +232,26 @@ h1{
   opacity: 1;
   max-height: 100px; /* adjust this value to your desired height */
   transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+/*This rule is for smaller screens, causing the modal overlay to appear centrally, rather than to one side of the screen*/
+@media only screen and (max-width: 1200px) {
+  
+  #modal-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: 10vw;
+    margin-top: -40vh;
+    min-width: 80vw; 
+    min-height: 80vh; 
+    max-width: 80vw;
+    max-height: 80vh;
+  }
+  
+  /* Remove the left and right positioning classes */
+  #modal-overlay.right-modal, #modal-overlay.left-modal {
+    left: auto;
+    right: auto;
+  }
 }

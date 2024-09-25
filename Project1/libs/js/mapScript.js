@@ -1,7 +1,9 @@
+//importing the minimalist tyleset for the map
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
   
+  //applying the GeoJSON border data to make interactable countries on the map
   fetch('countryBorders.geo.json')
   .then(response => response.json())
   .then(data => {
@@ -14,7 +16,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     },
     onEachFeature: function(feature, layer) {
      var clickInitial;
-        
+      //this mouseover feature causes the country to be highlighted, and then the mouseout dehighlights the country  
       layer.on({
         mouseover: function() {
           layer
@@ -40,7 +42,9 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         },
         mousedown: function() {
           clickInitial= new Date().getTime();
+          
         },
+        //this function registers the click with the map script, despite the GeoJSON being clicked. It also causes the zoom to the clicked area with the flyTo map function
         mouseup: function(e) {
             var clickDuration = new Date().getTime() - clickInitial; 
             if (clickDuration < 200)  {
@@ -52,6 +56,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             target: mapElement,
             clientX: e.clientX
              });
+             
              mapElement.dispatchEvent(event);
              var latlng = map.mouseEventToLatLng(e.originalEvent);
            // Zoom to the clicked coordinates
@@ -61,29 +66,9 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
           document.dispatchEvent(clickEvent);
         }},
 
-        touchstart: function(e) {
-          clickInitial = new Date().getTime();
-        },
-        touchend: function(e) {
-          var clickDuration = new Date().getTime() - clickInitial;
-          if (clickDuration < 200) {
-            var mapElement = document.getElementById('map');
-            var event = new MouseEvent('click', {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-              target: mapElement,
-              clientX: e.touches[0].clientX
-            });
-            mapElement.dispatchEvent(event);
-            var latlng = map.mouseEventToLatLng(e);
-            // Zoom to the clicked coordinates
-            map.flyTo(latlng, 9, { duration: 1 });
         
-            var clickEvent = new CustomEvent('mapClick', { detail: e.touches[0].clientX });
-            document.dispatchEvent(clickEvent);
-          }
-        }
+
+        
       });
     }
   

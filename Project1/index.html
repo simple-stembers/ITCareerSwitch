@@ -22,6 +22,14 @@
    
   </head>
   <body>
+    //<!-- Loader -->
+    <div id="loader" style="display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(255, 255, 255, 0.7);">
+      <div style="text-align: center; flex-direction: column;">
+        <h1>Traveller's Companion is loading</h1>
+        <img src="./libs/weather-icons/Flying airplane.gif" alt="Loading animation">
+      </div>
+    </div>
+    <!--Using Bootstrap for the navbar -->
     <div id="header">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -38,6 +46,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Links <span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                  <!--These links will be completed when I work on the website so I have pages to link to-->
                   <li><a href="">Home</a></li>
                   <li><a href="">The GDQ</a></li>
                   <li><a href="">API Practice</a></li>
@@ -48,8 +57,9 @@
           </div>
         </div>
       </nav>
-     <h1>Traveller's Companion</h1>
+     <h1><b>Traveller's Companion</b></h1>
     </div>
+    <!--Leaflet map initial setup, further completed in the mapScript.js-->
     <div id="map" class="map"></div>
     <script>
        
@@ -67,14 +77,16 @@
      
     </script>
 
-    <!-- The modal overlay container -->
+    <!-- My modal overlay basics. I didn't use bootstrap for this, as I was practicing with css -->
 <div id="modal-overlay" class="modal-overlay">
+  <!-- The close button -->
   <button id="close-modal" class="close-modal">&times;</button>
-  <!-- The modal content -->
+  <!-- The main modal content box -->
   <div class="modal-content">
-    <!-- The close button -->
+    
      <div class = "modal-header">
       <h1 id="countryName"></h1>
+      <!-- Used Ukraine as the default flag as it is where the developer of the API is from, and I felt it is a small touch to reference them-->
       <img
         id="countryFlag"
         src="https://flagcdn.com/ua.svg"
@@ -83,7 +95,7 @@
       
      </div>
     
-    <!-- The modal content goes here -->
+    <!-- These are the tab links that will swap between the different forms of modal information -->
     <ul class="nav nav-tabs" id="modal-tabs">
       <li class="active"><a href="#demographics" data-toggle="tab">Demographics</a></li>
       <li><a href="#local-results" data-toggle="tab">Local Results</a></li>
@@ -91,7 +103,7 @@
       <li><a href="#currency" data-toggle="tab">Currency</a></li>
       <li><a href="#wiki" data-toggle="tab">More Info</a></li>
     </ul>
-    <!-- Tab content -->
+    <!-- These are the boxes of results from the API calls -->
     <div class="tab-content">
       <div class="tab-pane active" id="demographics">
         <div id="capitalCity"></div>
@@ -116,7 +128,14 @@
     </div>
   </div>
 </div>
+
     
+    <!-- This script is for the loader image, which should disappear once the map has loaded -->
+    <script>
+      map.addEventListener("load", function(){
+        document.getElementById("loader").style.display = "none";
+      });
+    </script>
     <script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
     <script type="application/javascript" src="libs/js/script.js"></script>
     <script type="application/javascript" src="libs/js/mapScript.js"></script>

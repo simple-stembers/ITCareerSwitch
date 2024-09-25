@@ -1,7 +1,8 @@
 map.on('click', function(e) {
-         
+   //clear previous markers      
     markerGroup.clearLayers();
    
+    // getting the latitude and longitude of the clicked point
    var lat = e.latlng.lat;
     var lng = e.latlng.lng;
     var marker = L.marker([lat,lng]).addTo(markerGroup);
@@ -16,11 +17,10 @@ map.on('click', function(e) {
           lat: lat, lng: lng
         },
         success: function(result) {
-          console.log(JSON.stringify(result)); 
+          
           var countryCode = result.data.countryCode;
           var countryName = result.data.countryName;
 
-          //WIKIPEDIA TAG
 
           
 
@@ -47,15 +47,16 @@ map.on('click', function(e) {
                   country: countryCode
                 },
                 success: function(result) {
-                  console.log(JSON.stringify(result)); 
+                  
                   
                   if (result.status.name == 'ok') {
-                    $('#capitalCity').html('<h4>The Capital City: '+ result.data.capital + '</h4>');
+                    $('#capitalCity').html('<h4>The Capital City:<b> '+ result.data.capital + '</b></h4>');
 
-                    $('#population').html('<h4>The Population: '+ result.data.population + '</h4>');
+                    $('#population').html('<h4>The Population: <b>'+ result.data.population + '</b></h4>');
                 }
 
                 //WIKIPEDIA API CALL
+                //using an iframe to allow for access to the full wiki page of the country within the modal overlay
 
                 document.getElementById('wikiResults').innerHTML = '<iframe class="wiki-iframe"src="https://en.wikipedia.org/wiki/' + countryName + '"></iframe>';
 
@@ -72,11 +73,11 @@ map.on('click', function(e) {
                     country: countryCode
                   },
                   success: function(result) {
-                    console.log(JSON.stringify(result)); 
+                 
                     
                     if (result.status.name == 'ok') {
                       if (result.data) {
-                      $('#helloResults').html("<h4>The local 'Hello': " + result.data + "</h4>");}
+                      $('#helloResults').html("<h4>The local 'Hello': <b>" + result.data + "</b></h4>");}
                       else{
                         $('#helloResults').html("<h4>I'm not sure how to say 'Hello!' here, sorry!</h4>");
                       }
@@ -85,6 +86,8 @@ map.on('click', function(e) {
                 }
                 )
                 // CURRENCY API CALL
+                // unfortunately this API has a monthly limit which I reached relatively quickly during testing. Once finished, it is unlikely for there to be enough API calls to reach this limit in the future.
+
                 var currency = result.data.currencyCode;
                
 
@@ -96,20 +99,21 @@ map.on('click', function(e) {
                     currency: currency
                   },
                   success: function(result) {
-                    console.log(JSON.stringify(result)); 
                    
+                    //I was unable to access an exchange rate changer for free, so this is just a simple function to convert from one currency to another
                     function exchangeMoney(homeMoney) {
                       return (homeMoney/result.data.gbp)*result.data.local;
                     };
                     $('#currencyResults').html(
                       `<h4>The Local Currency: ${currency}<br>
-                      Exchange your money:</h4> <br>
+                      Exchange your money: <br>
                       £<input type="float" id="homeMoney" value="1">
-                      <span id="exchangeResult"></span>`);
-
+                      <b><span id="exchangeResult"></span></b></h4>`);
+                     
                       $('#homeMoney').on('input', function() {
                        var homeMoney = parseFloat($(this).val());
                        var exchangeResult = (exchangeMoney(homeMoney, result.data.gbp)).toFixed(2);
+                       //This line is what shows when I have reached my API credits for the month
                        if (exchangeResult === "NaN") {
                          $('#exchangeResult').html("Currently exceeded monthly exchanging limit, sorry!");
                        }
@@ -150,8 +154,8 @@ map.on('click', function(e) {
         lat: lat, lng: lng
       },
       success: function(result) {
-       // console.log(JSON.stringify(result)); 
-        
+      
+        //this api returns data every 3 hours, so to avoid bloat I thought it made sense to give now, 12 hours, 24 hours and 48 hours.
         if (result.status.name == 'ok') {
 
             const weatherUl = document.createElement('ul');
@@ -174,7 +178,7 @@ map.on('click', function(e) {
             let weatherIcon12=result.data.list[4].weather[0].icon;
             let weatherIcon24=result.data.list[8].weather[0].icon;
             let weatherIcon48=result.data.list[16].weather[0].icon;
-
+          //using animated weather icons from https://basmilius.github.io/weather-icons/
              const weatherGrid = `
               <div class="weather-grid">
                 <div class="weather-box">
@@ -203,10 +207,10 @@ map.on('click', function(e) {
                 </div>
               </div>
             `;
-
+          //because this api also returns the closest town/area name registered to the weather station, I use this for the local area name as well as weather.
             document.getElementById('weatherResults').innerHTML = weatherGrid;
             if (result.data.city.name)  {
-            $('#nearestCity').html('<h4>This area is called: ' + result.data.city.name + '</h4>');
+            $('#nearestCity').html('<h4>This area is called: <b>' + result.data.city.name + '</b></h4>');
             } else{
             $('#nearestCity').html("<h4>I'm not sure what this area is called, sorry</h4>");
             }
@@ -226,8 +230,7 @@ map.on('click', function(e) {
         lat: lat, lng: lng
       },
       success: function(result) {
-        console.log('SOMETHING IS HAPPENING HERE');
-        console.log('RESULT: ' + JSON.stringify(result));
+        
         if (result.status.name == 'ok') {
           if (result.data.length === 0) {
             $('#POIs').html('<h4>I can\'t find much to do around here, sorry!</h4>');
@@ -236,7 +239,7 @@ map.on('click', function(e) {
             var $poisList = $('<ul>');
             $.each(result.data, function(index, poi) {
                 var $poiItem = $('<li>');
-                $poiItem.text(poi.name);
+                $poiItem.html('<b>' + poi.name + '</b>');
                 console.log('POI NAME: ' + poi.name);
                 var $poiDetails = $('<ul>').addClass('poi-details');
                 $poiDetails.append($('<li>').text('Address: ' + poi.address));
@@ -245,7 +248,7 @@ map.on('click', function(e) {
                 
                 $poiItem.append($poiDetails);
                 $poisList.append($poiItem);
-
+              //this code creates a smaller red marker on the map showing where the nearest POIs are. They are clickable to show their name
                 var marker = L.marker([poi.lat, poi.lng], {
                   icon: L.icon({
                     iconUrl: '../project1/libs/weather-icons/mapPin.png',
@@ -257,11 +260,12 @@ map.on('click', function(e) {
                 
                 .addTo(markerGroup);
                 marker.bindPopup('<div class="popup-text">' + poi.name + '</div>');
+                
             });
             
             $('#POIs').html('<h4>Here are some local points of interest:</h4>').append($poisList);
             
-            // Add event listener to toggle details list
+            // this allows POIs to be clickable inside the modal overlay to show further details from the API
             $('#POIs li').on('click', function() {
                 $(this).find('.poi-details').toggleClass('expanded');
             });}

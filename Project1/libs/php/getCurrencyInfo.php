@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 $executionStartTime = microtime(true);
 
+// this api has a monthly credit limit. This is unlikely to be reached in normal use once page is finished, but can be reached if testing a lot.
 
 $url='http://api.exchangeratesapi.io/v1/latest?access_key=c09c8a4eb723e8b483a8518e9e6f32e4&symbols=GBP,USD,EUR,' . $_REQUEST['currency'];
     

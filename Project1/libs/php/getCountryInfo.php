@@ -17,7 +17,7 @@ curl_setopt($ch, CURLOPT_URL,$url);
 $result=curl_exec($ch);
 
 curl_close($ch);
-
+//this api returns xml rather than json, so I need to use simplexml_load_string to convert it to an easy array. The output at the end is still json
 $decode = array(simplexml_load_string($result));
 	
 

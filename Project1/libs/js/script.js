@@ -202,7 +202,7 @@ fetch('./libs/resources/countryBorders.geo.json')
                     
                     
                     if (result.status.name == 'ok') {
-                      $('#capitalCity').html( result.data.capital );
+                      $('#capitalCity').html('<h4>The Capital City: <b>' + result.data.capital + '</b></h4>' );
   
                       $('#population').html('<h4>The Population: <b>'+ result.data.population + '</b></h4>');
                   }

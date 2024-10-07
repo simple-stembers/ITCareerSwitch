@@ -176,6 +176,10 @@ h1{
 #homeMoney {
   background-color: rgba(230, 245, 252, 0.7);
 }
+
+#awayMoney {
+  background-color: rgba(230, 245, 252, 0.7);
+}
 /* This styling is for the weather tab */
 .weather-grid {
   display: flex;

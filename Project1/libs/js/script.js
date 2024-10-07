@@ -1,4 +1,6 @@
 var markerClusterGroup;
+//this variable is used for the airport feature, and is updated with each click or dropdown menu event
+var selectedCountryName;
 
 fetch('./libs/resources/countryBorders.geo.json')
   .then(response => response.json())
@@ -36,7 +38,7 @@ fetch('./libs/resources/countryBorders.geo.json')
       var countryLayer;
 
       //GET AIRPORT DATA
-
+      selectedCountryName=selectedCountry.name;
       
       //NEWS API CALL
           
@@ -133,6 +135,8 @@ fetch('./libs/resources/countryBorders.geo.json')
         var currencySymbol = response.data.currencySymbol;
         var centerLat = response.data.centerLat;
         var centerLng = response.data.centerLng;
+        var driveOn = response.data.driveOn;
+        var timezone = response.data.timezone;
         
 
         map.flyTo([centerLat, centerLng], 7, { duration: 1 });
@@ -142,12 +146,12 @@ fetch('./libs/resources/countryBorders.geo.json')
         });
 
         map.eachLayer(function(layer) {
-          if (layer instanceof L.GeoJSON) {
+          if (layer.options && layer.options.highlighted) {
             map.removeLayer(layer);
           }
         });
-
-        // Create a layer from the GeoJSON data
+    
+        // Create the new selected country's layer
         var countryLayer = L.geoJSON(countryGeoJSON, {
           style: {
             weight: 2,
@@ -157,9 +161,18 @@ fetch('./libs/resources/countryBorders.geo.json')
             className: 'countryBorders'
           }
         });
-      
-        // Add the layer to the map
+    
+        // Add the new layer to the map
         countryLayer.addTo(map);
+    
+        // Mark this layer as the highlighted layer
+        countryLayer.options.highlighted = true;
+
+        $('#driveOn').html('<h4>Cars drive on the: <b>' + driveOn + '</b></h4>');
+        $('#timeZone').html('<h4>Local time zone: <b>' + timezone + '</b></h4>');
+
+        // Create a layer from the GeoJSON data
+       
         
         $.ajax( {
           url: "libs/php/getCountry.php",
@@ -242,6 +255,7 @@ fetch('./libs/resources/countryBorders.geo.json')
   
                   var currency = result.data.currencyCode;
                  
+                  $('#currencyDemo').html('<h4>The Local Currency: <b>'+ currencySymbol+ ' ' + currency + '</b></h4>');
   
                   $.ajax( {
                     url: "libs/php/getCurrencyInfo.php",
@@ -260,12 +274,12 @@ fetch('./libs/resources/countryBorders.geo.json')
                         return (awayMoney/result.data.local)*result.data.gbp;
                       }
                       $('#currency').html(
-                        `<h5>The Local Currency: ${currency}<br>
+                        `<h4>The Local Currency: ${currency}<br>
                         Exchange your money: <br>
                         £<input type="float" id="homeMoney" value="1">
                         <b><span id="exchangeResult"></span></b><br>
                         ${currencySymbol} <input type="float" id="awayMoney" value="1">
-                        <b><span id="reexchangeResult"></span></b></h5>`);
+                        <b><span id="reexchangeResult"></span></b></h4>`);
                        
                         $('#homeMoney').on('input', function() {
                          var homeMoney = parseFloat($(this).val());
@@ -400,6 +414,8 @@ map.on('click', function(e) {
     var marker = L.marker([lat,lng]).addTo(markerGroup);
     console.log('Clicked at: ' + lat + ', ' + lng);
 
+    var previousLayerId = null;
+    
     //GEONAMES COUNTRY SUBDIVISION API CALL
     $.ajax( {
         url: "libs/php/getCountry.php",
@@ -412,10 +428,35 @@ map.on('click', function(e) {
           
           var countryCode = result.data.countryCode;
           var countryName = result.data.countryName;
-
-
-          //NEWS API CALL
+          selectedCountryName=countryName;
+          var countryGeoJSON = data.features.filter(function(feature) {
+            return feature.properties.iso_a2 === countryCode;
+          });
           
+          
+
+          map.eachLayer(function(layer) {
+            if (layer.options && layer.options.highlighted) {
+              map.removeLayer(layer);
+            }
+          });
+      
+          // Create the new selected country's layer
+          var countryLayer = L.geoJSON(countryGeoJSON, {
+            style: {
+              weight: 2,
+              color: 'lightblue',
+              opacity: 0.4,
+              fillOpacity: 0.4,
+              className: 'countryBorders'
+            }
+          });
+      
+          // Add the new layer to the map
+          countryLayer.addTo(map);
+      
+          // Mark this layer as the highlighted layer
+          countryLayer.options.highlighted = true;
 
           $.ajax({
             type: 'POST',
@@ -568,9 +609,14 @@ map.on('click', function(e) {
                 success: function(response) {
                  
                   var currencySymbol = response.data.currencySymbol;
-                  
-                var currency = result.data.currencyCode;
-               
+                  var driveOn = response.data.driveOn;
+                  var timezone = response.data.timezone;
+                   var currency = result.data.currencyCode;
+
+                   $('#driveOn').html('<h4>Cars drive on the: <b>' + driveOn + '</b></h4>');
+                   $('#timeZone').html('<h4>Local time zone: <b>' + timezone + '</b></h4>');
+                   
+                  $('#currencyDemo').html('<h4>The Local Currency: <b>'+ currencySymbol+ ' ' + currency + '</b></h4>');
 
                 $.ajax( {
                   url: "libs/php/getCurrencyInfo.php",
@@ -589,12 +635,12 @@ map.on('click', function(e) {
                       return (awayMoney/result.data.local)*result.data.gbp;
                     }
                     $('#currency').html(
-                      `<h5>The Local Currency: ${currency}<br>
+                      `<h4>The Local Currency: ${currency}<br>
                       Exchange your money: <br>
                       £<input type="float" id="homeMoney" value="1">
                       <b><span id="exchangeResult"></span></b><br>
                       ${currencySymbol} <input type="float" id="awayMoney" value="1">
-                      <b><span id="reexchangeResult"></span></b></h5>`);
+                      <b><span id="reexchangeResult"></span></b></h4>`);
                      
                       $('#homeMoney').on('input', function() {
                        var homeMoney = parseFloat($(this).val());

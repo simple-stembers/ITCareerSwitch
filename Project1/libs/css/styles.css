@@ -320,3 +320,7 @@ h1{
   max-height: 500px; /* Adjust this value as needed */
   opacity: 1;
 }
+
+.nav-tabs {
+  display: none;
+}

@@ -39,56 +39,6 @@ document.addEventListener('pointerup', (e) => {
 
 
 
-// Add an event listener to the map click event
-document.addEventListener('click', (e) => {
-  //if a long click is registered, then the modal overlay is not opened
-    if (isLongClick) return;
-  //if a marker showing POIs is clicked, then the modal overlay is not opened to allow users to explore nearby POIs
-    if (e.target.classList.contains('leaflet-marker-icon')) {
-    return;}
-    else{
-
-    
-    if (isModalOpen) return; // If a modal is already open, do nothing
-
-    console.log('Click event triggered');
-    console.log('Event object:', e);
-  // Check if the click event is on the map
-  if (e.target.closest('#map, .countryBorders')) {
-    console.log('Map element clicked');
-    // Get the click position
-    const clickX = e.clientX;
-    
-
-    console.log('Click position:', clickX);
-
-    //the following code is to allow the modal overlay to open on the side of the screen that was not clicked. This only applies to larger screens
-    const viewportWidth = window.innerWidth;
-    
-   
-    
-    let modalPosition;
-
-
-    if (clickX < viewportWidth / 2) {
-        modalPosition = 'right-modal';
-      } else {
-        
-        modalPosition = 'left-modal'; 
-      }
-
-    // Add the modal position class to the modal content
-    modalOverlay.classList.add(modalPosition);
-    isModalOpen = true;
-    // Show the modal overlay
-   
-   
-    //this final step causes the modal overlay to appear after it's side of the screen has been decided.
-      modalOverlay.classList.add('show');
-    
-      
-  }
-}});
 
 
 
@@ -218,17 +168,7 @@ var newsBtn = L.easyButton("fa-newspaper fa-xl", function(btn, map) {
           mousedown: function() {
             clickInitial = new Date().getTime();
           },
-          mouseup: function(e) {
-            var clickDuration = new Date().getTime() - clickInitial; 
-            if (clickDuration < 200)  {
-            var mapElement = document.getElementById('map');
-            var event = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-             view: window,
-            target: mapElement,
-            clientX: e.clientX
-             });}}
+          
         });
       }
       
@@ -284,8 +224,8 @@ var newsBtn = L.easyButton("fa-newspaper fa-xl", function(btn, map) {
           markers = null;
         } else {
           // If markers are not displayed, create and add them
-          var countrySelect = document.getElementById('countrySelect');
-          var selectedCountry = countrySelect.options[countrySelect.selectedIndex].text;
+          
+          var selectedCountry = selectedCountryName;
           var countryAirports = airportsData.filter(function(airport) {
             return airport.country.toLowerCase() === selectedCountry.toLowerCase();
           });

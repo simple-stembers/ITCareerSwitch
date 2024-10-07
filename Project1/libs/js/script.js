@@ -598,11 +598,11 @@ map.on('click', function(e) {
                 // unfortunately this API has a monthly limit which I reached relatively quickly during testing. Once finished, it is unlikely for there to be enough API calls to reach this limit in the future.
                 $.ajax({
                   type: 'POST',
-                  url: 'libs/php/getOpenCage.php',
+                  url: 'libs/php/getOpenCageClick.php',
                   dataType: 'json',
                   data: { 
-                    country: countryName,
-                    countryCode: countryCode
+                    lat: lat,
+                    lng: lng
                   },
                   
           

@@ -2,6 +2,25 @@ var markerClusterGroup;
 //this variable is used for the airport feature, and is updated with each click or dropdown menu event
 var selectedCountryName;
 
+function populateDropdown() {
+
+  $.ajax({
+    url: "libs/php/getBorderGeojson.php",
+    type: 'GET',
+    success: function(data) {
+      let option = "";
+      for (let country of data) {
+        option += '<option value="' + country[1] + '">'+ country[0] +'</option>';
+      }
+
+      $("#countrySelect").append(option);
+    }
+  })
+}
+
+populateDropdown();
+
+
 fetch('./libs/resources/countryBorders.geo.json')
   .then(response => response.json())
   .then(data => {
@@ -22,12 +41,7 @@ fetch('./libs/resources/countryBorders.geo.json')
     
 
     // Second part: Create the options and add them to the select element
-    countryData.forEach(country => {
-      const option = document.createElement('option');
-      option.value = country.isoA2;
-      option.textContent = country.name;
-      countrySelect.appendChild(option);
-    });
+  
 
     countrySelect.addEventListener('change', () => {
       console.log('EVENT LISTENER ACTIVE');
@@ -35,7 +49,7 @@ fetch('./libs/resources/countryBorders.geo.json')
       const selectedCountry = countryData.find(country => country.isoA2 === selectedCountryCode);
       selectedCountry.name = selectedCountry.name.replace(/\s+/g, '_').replace(/\./g, '');
       
-      var countryLayer;
+      
 
       //GET AIRPORT DATA
       selectedCountryName=selectedCountry.name;
@@ -413,8 +427,8 @@ map.on('click', function(e) {
     var lng = e.latlng.lng;
     var marker = L.marker([lat,lng]).addTo(markerGroup);
     console.log('Clicked at: ' + lat + ', ' + lng);
-
-    var previousLayerId = null;
+    map.flyTo([lat, lng], 7, { duration: 1 });
+    
     
     //GEONAMES COUNTRY SUBDIVISION API CALL
     $.ajax( {

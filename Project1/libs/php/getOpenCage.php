@@ -28,6 +28,14 @@ $output['status']['description'] = "success";
 $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 $output['data'] = array();
 
+if (isset($decode['results'][0]['annotations']['currency']['name'])) {
+    $output['data']['currencyName'] = $decode['results'][0]['annotations']['currency']['name'];
+}
+
+if (isset($decode['results'][0]['annotations']['currency']['iso_code'])) {
+    $output['data']['currencyCode'] = $decode['results'][0]['annotations']['currency']['iso_code'];
+}
+
 if (isset($decode['results'][0]['annotations']['currency']['html_entity'])) {
     $output['data']['currencySymbol'] = $decode['results'][0]['annotations']['currency']['html_entity'];
 }
@@ -48,6 +56,9 @@ if (isset($decode['results'][0]['annotations']['roadinfo']['drive_on'])) {
     $output['data']['driveOn'] = $decode['results'][0]['annotations']['roadinfo']['drive_on'];
 }
     
+if (isset($decode['results'][0]['components']['continent'])) {
+    $output['data']['continent'] = $decode['results'][0]['components']['continent'];
+}
 
 header('Content-Type: application/json; charset=UTF-8');
 

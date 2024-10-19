@@ -15,35 +15,120 @@ html, body{
     margin: 0;
     overflow: hidden;
 }
-
-#header{
-    height: 6%;
-    width: 100%;
-    display: flex;
-    position: relative;
-    align-items: center;
+#loader {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
 }
-.navbar {
-  background-color: transparent;
-  max-width: 20vw;
-  border: none;
-  margin-right: 20px;
+
+#loader-content{
+  text-align: center;
+  flex-direction: column;
+}
+
+#noNews {
+  display: none;
   position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1001;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  text-align: center;
+  font-size: 1.3em;
+  color: rgb(97, 3, 3);
+  margin-top: 20px;
+  background:#fff;
+  opacity:1;
 }
 
-#header h1{
-  text-align: center;
-  flex:1;
-  font-size: clamp(24px, 4vw, 40px);
-  
+.pre-load {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
 }
-/* This h1 tag also affects the modal overlay */
-h1{
-  text-align: center;
+
+#pre-load-news:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #f2f2f2;
+    border-top: 6px solid #8a2e2e ;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: animate-preloader 1s linear infinite;
+    animation: animate-preloader 1s linear infinite;
+}
+
+#pre-load-wiki:before {
+  content: "";
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 6px solid #f2f2f2;
+  border-top: 6px solid #ddb55e ;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: animate-preloader 1s linear infinite;
+  animation: animate-preloader 1s linear infinite;
+}
+
+
+
+
+#pre-load-weather:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #f2f2f2;
+    border-top: 6px solid #224380 ;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: animate-preloader 1s linear infinite;
+    animation: animate-preloader 1s linear infinite;
+}
+
+@-webkit-keyframes animate-preloader {
+    0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    }
+    100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+    }
+    }
+    @keyframes animate-preloader {
+    0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    }
+    100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+    }
+}
+
+.fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1s, opacity 1s linear;
 }
 
 #map .leaflet-interactive {
@@ -52,219 +137,16 @@ h1{
 
 
 /* The modal overlay styling */
-#modal-overlay {
-    position: fixed;
-    top: 25%;
-    width: 40vw ;
-    height: 60vh ;
-    background-color: rgba(59, 193, 255, 0.5);
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.8s, visibility 0.8s;
-    z-index: 1000 !important;
-    will-change: opacity;
-  }
-
-  #modal-overlay.show {
-    
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.8s;
-  }
-  
-  
-  /* Positions the modal content on the right side */
-  #modal-overlay.right-modal {
-    right: 0;
-    left:auto;
-    
-  }
-
-  /* Positions the modal content on the left side */
-  #modal-overlay.left-modal {
-    left: 0;
-    right:auto;
-    
-  }
-
-  #modal-overlay.center-modal{
-    left: auto;
-    right: auto;
-  }
-  /* Styles the modal content */
-  .modal-content {
-    top: 2%;
-    left: 5%;
-    width: 90%;
-    height: 90%;
-    padding: 0px;
-    box-shadow: none;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    }
-  
- 
-  /* Styles the close button */
-  .close-modal {
-    position: absolute;
-    background-color: transparent;
-    color: #333;
-    top: 10px;
-    right: 10px;
-    font-size: 36px;
-    border: transparent;
-    cursor: pointer;
-    z-index: 1002;
-  }
-  
-  /* Styles the modal body */
 
 
-  .tab-content { 
-    height: 75%;
-    padding: 10px;
-    padding-top:0px;
-    margin-top:0px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    
-    
-  }
-  
-  .nav-tabs {
-    margin-bottom: 10px;
-    
-  }
-  
-  .nav-tabs li {
-    margin-bottom: 5px;
-  
-  }
-  
-  
-
-  .tab-pane, .tab-pane.active {
-    overflow-y: auto;
-    flex: 1;
-    overflow-x: hidden;
-    text-align: center;
-    justify-content: space-between;
-
-  }
-
-  .wiki-iframe {
-    border: none;
-    height: 98%;
-    width: 100%;
-  }
-
-#countryFlag {
-  display: block;
-  margin: 0 auto;
-
-}
-#wikiResults {
-  height: 100%;
-  
-}
-/* Styles the input box for the exhanger */
-#homeMoney {
-  background-color: rgba(230, 245, 252, 0.7);
+#wikiFrame {
+  width: 100%; 
+  height: 70vh; 
+  border: none; 
 }
 
-#awayMoney {
-  background-color: rgba(230, 245, 252, 0.7);
-}
-/* This styling is for the weather tab */
-.weather-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content:space-around;
-  
-}
 
-.weather-box {
-  background-color:rgba(230, 245, 252, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width:200px;
-  height: 350px;
-  margin: 10px;
 
-}
-
-.weather-box img {
-  width: 100%;
-
-  margin: 0;
-  padding: 0;
-  object-fit: cover;
-}
-
-.weather-box h4 {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.weather-box p {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.poi-details {
-  display: none;
-}
-/* Styles the text in the pop-up when POI is clicked */
-.popup-text {
-  font-size: 18px; 
-}
-
-#POIs li{
-  cursor: pointer;
-}
-/* Transitions the expandable POI information*/
-.poi-details{
-  display: block;
-  opacity:0;
-  max-height: 0;
-  overflow:hidden;
-  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
-}
-
-.poi-details.expanded {
-  display: block;
-  opacity: 1;
-  max-height: 1000px; /* adjust this value to your desired height */
-  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
-}
-
-/*This rule is for smaller screens, causing the modal overlay to appear centrally, rather than to one side of the screen*/
-@media only screen and (max-width: 1200px) {
-  
-  #modal-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: 10vw;
-    margin-top: -40vh;
-    min-width: 80vw; 
-    min-height: 80vh; 
-    max-width: 80vw;
-    max-height: 80vh;
-  }
-  
-  /* Remove the left and right positioning classes */
-  #modal-overlay.right-modal, #modal-overlay.left-modal {
-    left: auto;
-    right: auto;
-  }
-}
 #mapContainer {
   position: relative;
   width: 100%;
@@ -273,7 +155,6 @@ h1{
 
 .input-group.mb-3 {
   position: absolute;
-  
   top: 30px;
   left: 50%;
   transform: translateX(-50%);
@@ -285,46 +166,11 @@ h1{
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  min-width:200px;
 }
 
-.news-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.news-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  border: transparent;
-  padding: 10px;
-  border-radius: 5px;
-  transition: all 0.6s ease;
-}
-
-.news-item img {
-  max-width: 150px;
-  border-radius: 5px;
-}
-
-.news-item .content {
-  flex: 1;
-}
-
-.news-item .details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.6s ease, opacity 0.6s ease;
-  margin-top: 10px;
-}
-
-.news-item.active .details {
-  max-height: 500px; /* Adjust this value as needed */
-  opacity: 1;
-}
-
-.nav-tabs {
-  display: none;
+.loadingImg {
+  width: 2em; 
+  height: 2em; 
+  vertical-align: middle; 
 }

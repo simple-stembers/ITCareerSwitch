@@ -7,121 +7,542 @@
     <meta name="Author" content="Stephen Chambers">
     <meta name="Description" content="Project 1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Traveller's Companion</title>
+    <title>Gazetteer</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
-     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-    <link rel="stylesheet" href="libs/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-    <link rel="stylesheet" href="libs/resources/markerCluster/MarkerCluster.css"/>
-    <link rel="stylesheet" href="libs/resources/markerCluster/MarkerCluster.Default.css"/>
-    <script src="libs/resources/markerCluster/leaflet.markercluster-src.js">    </script>
+    <link rel="stylesheet" href="./libs/css/components/bootstrap.min.css">
+    <link rel="stylesheet" href="./libs/css/components/leaflet.css">
+    <link rel="stylesheet" href="./libs/css/components/easy-button.css">
+    <link rel="stylesheet" href="./libs/css/components/fontawesome.all.min.css" />
+    <link rel="stylesheet" href="./libs/css/components/MarkerCluster.css"/>
+    <link rel="stylesheet" href="./libs/css/components/MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="./libs/css/components/leaflet.extra-markers.min.css"/>
+    <link rel="stylesheet" href="./libs/css/styles.css">
    
   </head>
+
+
   <body>
     <!-- Loader -->
-    <div id="loader" style="display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(255, 255, 255, 0.7);">
-      <div style="text-align: center; flex-direction: column;">
-        <h1>Traveller's Companion is loading</h1>
+    <div id="loader">
+      <div id="loader-content">
+        <h1>Gazatteer is loading</h1>
         <img src="./libs/resources/Flying airplane.gif" alt="Loading animation">
       </div>
     </div>
 
      <!-- Dropdown menu select-->
-     <div id="mapContainer">
+    <div id="mapContainer">
       <div class="input-group mb-3">
-          <select id="countrySelect" class="form-select-lg mb-3">
+          <select id="countrySelect" class="form-select mb-3">
               <option value="" selected>Choose a country</option>
           </select>
       </div>
       <!-- Your map element here -->
       <div id="map"></div>
-  </div>
+    </div>
     
+    <!--WEATHER MODAL-->
+
+    <div id="weatherModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="weatherModalLabel" aria-hidden="true">
+    
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        
+        <div class="modal-content shadow">      
+            
+          <div class="modal-header bg-primary bg-gradient text-white">
+    
+            <h5 class="modal-title" id="weatherModalLabel"></h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    
+          </div>
+    
+          <div class="modal-body">
+            
+            <div id="pre-load-weather" class="pre-load"></div>
+    
+            <div class="row">
+    
+              <div class="col border m-2">
+    
+                <p class="fw-bold fs-5 mt-1">TODAY</p>
+                
+                <div class="row">
+                  
+                  <div class="col text-center m-3">
+                    
+                    <p id="todayConditions" class="fw-bold fs-6"></p>
+
+                    <p class="fw fs-6 mt-0 text-secondary">Chance of rain: <span id="todayChanceOfRain" class="fw-bold fs-6"></span>%</p>
+                      
+                  </div>
+                  
+                  <div class="col text-center">
+                    
+                    <img id="todayIcon" class="img-fluid mt-0" src="" alt="" title="">
+                      
+                  </div>              
+    
+                  <div class="col text-center">
+                    
+                    <p class="fw-bold fs-4 mb-0"><span id="todayTemp">3</span><sup>o</sup><span class="tempMetric">c</span></p>
+                    <p class="fs-5 mt-0 text-secondary"><span id="feelsLike">-2</span><sup>o</sup><span class="tempMetric">c</span></p>
+                      
+                  </div>              
+                  
+                </div>
+    
+              </div>   
+    
+            </div>
+    
+            <div class="row">
+    
+              <div class="col border m-2">
+                
+                <div class="row">
+                  
+                  <div class="col text-center">
+    
+                    <p id="day1Date" class="fw-bold fs-6 mt-3"></p>
+                    
+                  </div>
+                  
+                </div>
+                
+                <div class="row">
+                  
+                  <div class="col text-center">
+                    
+                    <p class="fw-bold fs-4 mb-0"><span id="day1MaxTemp"></span><sup>o</sup>c</p>
+                    <p class="fs-5 mt-0 text-secondary"><span id="day1MinTemp"></span><sup>o</sup>c</p>
+                    
+                  </div>
+                  
+                  <div class="col text-center">
+                    
+                    <img id="day1Icon" src="" alt="" title="">
+                    
+                  </div>    
+                  
+                </div>
+                
+              </div>   
+    
+              <div class="col border m-2">
+    
+                <div class="row">
+                  
+                  <div class="col text-center">
+    
+                    <p id="day2Date" class="fw-bold fs-6 mt-3">Fri 16th</p>
+                    
+                  </div>
+                  
+                </div>
+                
+                <div class="row">
+                  
+                  <div class="col text-center">
+                    
+                    <p class="fw-bold fs-4 mb-0"><span id="day2MaxTemp"></span><sup>o</sup>c</p>
+                    <p class="fs-5 mt-0 text-secondary"><span id="day2MinTemp"></span><sup>o</sup>c</p>
+                    
+                  </div>
+                  
+                  <div class="col text-center">
+                    
+                    <img id="day2Icon" src="" alt="" title="">
+                    
+                  </div>    
+                  
+                </div>
+                
+              </div>         
+    
+           </div>   
+        
+          </div>
+          
+          <div class="modal-footer">
+            <p class="fs-6 fw-light">Last updated <span id="lastUpdated"></span>. Powered by <a href="https://www.weatherapi.com/" target="_blank" title="Free Weather API">WeatherAPI.com</a></p>
+          </div>
+    
+        </div>
+          
+      </div>
+      
+    </div>
+
+
+
+    <!-- NEWS MODAL-->
+
+
+    <div id="newsModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  
+      
+      
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+           
+        <div class="modal-content shadow"> 
+          
+          <div class="modal-header bg-danger bg-gradient text-white">
+            <h5 class="modal-title">BREAKING NEWS</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+    
+          <div class="modal-body">
+            
+            <div id="pre-load-news" class="pre-load">
+             
+          </div>
+              <!-- first item -->          
+            <div id="noNews">Sorry, I have no news data for this country!</div>
+
+            <table class="table table-borderless">
+                   
+              <tr>
+    
+                <td rowspan="2" width="50%">
+                  <img class="img-fluid rounded" id="news1Img"src="" alt="" title="">
+                </td>
+                
+                <td>
+                  <a href="" class="fw-bold fs-6 text-black" target="_blank" id="news1Article"></a>
+                </td>
+                
+              </tr>
+              
+              <tr>
+                           
+                <td class="align-bottom pb-0">
+                  
+                  <p class="fw-light fs-6 mb-1" id="news1Source"></p>
+                  
+                </td>            
+                
+              </tr>
+              
+            </table>
+            
+            <hr>
+            
+            <!-- second item -->
+            
+            <table class="table table-borderless mb-0">       
+              
+              <tr>
+    
+                <td rowspan="2" width="50%">
+                  <img class="img-fluid rounded" id="news2Img"src="" alt="" title="">
+                </td>
+                
+                <td>
+                  <a href="" class="fw-bold fs-6 text-black" target="_blank" id="news2Article"></a>
+                </td>
+                
+              </tr>
+              
+              <tr>
+                           
+                <td class="align-bottom pb-0">
+                  
+                  <p class="fw-light fs-6 mb-1" id="news2Source"></p>
+                  
+                </td>            
+                
+              </tr>
+              
+              
+            </table> 
+            
+            <hr>
+            
+            <!-- third item -->
+            
+            <table class="table table-borderless mb-0">       
+              
+              <tr>
+    
+                <td rowspan="2" width="50%">
+                  <img class="img-fluid rounded" id="news3Img"src="" alt="" title="">
+                </td>
+                
+                <td>
+                  <a href="" class="fw-bold fs-6 text-black" target="_blank" id="news3Article"></a>
+                </td>
+                
+              </tr>
+              
+              <tr>
+                           
+                <td class="align-bottom pb-0">
+                  
+                  <p class="fw-light fs-6 mb-1" id="news3Source"></p>
+                  
+                </td>            
+                
+              </tr>
+    
+              
+              
+            </table>         
+    
+            
+            
+          </div>
+    
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          </div>
+     
+        </div>
+        
+      </div>
+      
+    </div>
+
+
+
+    <!-- CURRENCY MODAL -->
+
+    <div id="currencyModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      
+    
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+    
+        <div class="modal-content shadow">
+    
+          <div class="modal-header bg-secondary bg-gradient text-white">
+            <h5 class="modal-title">Currency calculator</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+    
+          <div class="modal-body">
+    
+            <form>
+    
+              <div class="form-floating mb-3">
+    
+                <input id="fromAmount" type="number" class="form-control" value="1">
+                <label >£ GBP</label>
+    
+              </div>
+    
+              <div class="form-floating mb-3">
+    
+                <div id="localCurrency" type="text" class="form-control" disabled>
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </div>
+                
+                <label for="exchangeRate">Local currency</label>
+    
+              </div>
+    
+              <div class="form-floating">
+    
+                <input id="toAmount" type="number" class="form-control" >
+                <label for="toAmount">Result</label>
+    
+              </div>
+    
+            </form>
+    
+          </div>
+    
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </div>
+
+
+    <!-- DEMOGRAPHICS MODAL -->
+
+    <div id="demoModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    
+        <div class="modal-content shadow">
+    
+          <div class="modal-header bg-success bg-gradient text-white">
+            <h5 class="modal-title">Demographics</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body">
+            
+            
+            <table class="table table-striped">
+              
+              <tr>
+    
+                <td class="text-center col-2">
+                  <i class="fas fa-city fa-xl text-success"></i>
+                </td>
+    
+                <td class="text-nowrap">
+                  Capital city
+                </td>
+    
+                <td id="capitalCity" class="text-end"> 
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-globe fa-xl text-success"></i>
+                </td>
+    
+                <td>
+                  Continent
+                </td>
+    
+                <td id="continent" class="text-end"> 
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">             
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-book fa-xl text-success"></i>
+                </td>
+    
+                <td>
+                  Languages
+                </td>
+    
+                <td id="languages" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-coins fa-xl text-success"></i>
+                </td>
+    
+                <td>
+                  Currency
+                </td>
+    
+                <td id="currency" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-car fa-xl text-success"></i>
+                </td>
+    
+                <td class="text-nowrap">
+                  Drive on
+                </td>
+    
+                <td id="driveOn" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-clock fa-xl text-success"></i>
+                </td>
+    
+                <td class="text-nowrap">
+                  Time zone
+                </td>
+    
+                <td id="timezone" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-users fa-xl text-success"></i>
+                </td>
+    
+                <td>
+                  Population
+                </td>
+    
+                <td id="population" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              <tr>
+    
+                <td class="text-center">
+                  <i class="fas fa-ruler fa-xl text-success"></i>
+                </td>
+    
+                <td class="text-nowrap">
+                  Area (km<sup>2</sup>)
+                </td>
+    
+                <td id="countryArea" class="text-end">
+                  <img src="libs/css/components/images/loading.svg" alt="loading" class="loadingImg">
+                </td>
+    
+              </tr>
+              
+    
+            </table>
+            
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+
+
+    <!-- WIKIPEDIA MODAL-->
+
+    <div id="wikiModal" class="modal modal-xl fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    
+        <div class="modal-content shadow">
+    
+          <div class="modal-header bg-warning bg-gradient text-white">
+            <h5 class="modal-title">Wikipedia</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body">
+            <div id="pre-load-wiki" class="pre-load"></div>
+            <iframe id="wikiFrame" src="" frameborder="0"></iframe>
+          </div>
+    </div>
+
+
 
     <!-- My modal overlay basics. I didn't use bootstrap for this, as I was practicing with css -->
-<div id="modal-overlay" class="modal-overlay">
-  <!-- The close button -->
-  <button id="close-modal" class="close-modal">&times;</button>
-  <!-- The main modal content box -->
-  <div class="modal-content">
     
-     <div class = "modal-header">
-      <h1 id="countryName"></h1><br>
-      <!-- Used Ukraine as the default flag as it is where the developer of the API is from, and I felt it is a small touch to reference them-->
-      <img
-        id="countryFlag"
-        src="https://flagcdn.com/ua.svg"
-        width="100"
-        alt="Ukraine">
-      
-     </div>
-    
-    <!-- These are the tab links that will swap between the different forms of modal information -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="demo-tab" data-toggle="tab" href="#demo" role="tab" aria-controls="demo" aria-selected="true">Demo</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="local-tab" data-toggle="tab" href="#local" role="tab" aria-controls="local" aria-selected="false">Local</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="news-tab" data-toggle="tab" href="#news" role="tab" aria-controls="news" aria-selected="false">News</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="weather-tab" data-toggle="tab" href="#weather" role="tab" aria-controls="weather" aria-selected="false">Weather</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="currency-tab" data-toggle="tab" href="#currency" role="tab" aria-controls="currency" aria-selected="false">Currency</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="wiki-tab" data-toggle="tab" href="#wiki" role="tab" aria-controls="wiki" aria-selected="false">Wiki</a>
-      </li>
-     
-      
-    </ul>
-    <!-- These are the boxes of results from the API calls -->
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="demo" role="tabpanel" aria-labelledby="demo-tab">
-        <div id="capitalCity"></div>
-        <div id="population"></div>
-        <div id="helloResults"></div>
-        <div id="currencyDemo"></div>
-        <div id="driveOn"></div>
-        <div id="timeZone"></div>
-      </div>
-      <div class="tab-pane fade" id="currency" role="tabpanel" aria-labelledby="currency-tab">
-        Currency content
-      </div>
-      <div class="tab-pane fade" id="weather" role="tabpanel" aria-labelledby="weather-tab">
-        Weather content
-      </div>
-      <div class="tab-pane fade" id="wiki" role="tabpanel" aria-labelledby="wiki-tab">
-        Wiki content
-      </div>
-      <div class="tab-pane fade" id="local" role="tabpanel" aria-labelledby="local-tab">
-        
-        <div id="nearestCity"></div>
-        <div id="POIs">
-          <h5>Click somewhere on the map to find out more about the local area</h5>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
-        
-      </div>
-    </div>
-   
-  </div>
-</div>
 
     
     <!-- This script is for the loader image, which should disappear once the map has loaded -->
@@ -130,11 +551,17 @@
         document.getElementById("loader").style.display = "none";
       });
     </script>
-    <script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="application/javascript" src="libs/js/components/jquery-2.2.3.min.js"></script>
+    <script src="./libs/node_modules/@popperjs/core/dist/umd/popper.min.js" ></script>
+    <script src="./libs/js/components/bootstrap.min.js"></script>
+    <script src="./libs/js/components/leaflet.js"></script>
+    <script src="./libs/js/components/easy-button.js"></script>
+    <script src="./libs/js/components/leaflet.markercluster-src.js"></script>
+    <script src="./libs/js/components/leaflet.extra-markers.min.js"></script>
+    <script src="./libs/js/components/numeral.min.js"></script>
+
     <script type="application/javascript" src="libs/js/script.js"></script>
-    <script type="application/javascript" src="libs/js/mapScript.js"></script>
+    
    
     
   </body>

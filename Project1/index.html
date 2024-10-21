@@ -523,19 +523,31 @@
 
     <!-- WIKIPEDIA MODAL-->
 
-    <div id="wikiModal" class="modal modal-xl fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="wikiModal" class="modal modal-lg fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     
         <div class="modal-content shadow">
     
           <div class="modal-header bg-warning bg-gradient text-white">
-            <h5 class="modal-title">Wikipedia</h5>
+            <h5 class="modal-title">More Info</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           
           <div class="modal-body">
             <div id="pre-load-wiki" class="pre-load"></div>
-            <iframe id="wikiFrame" src="" frameborder="0"></iframe>
+            <div id="wikiContent" class=>
+              <div id="flagContainer" class="float-end ms-3 mb-3">
+                <figure class="figure">
+                <img src="" alt="country flag" id="flagImg" class="figure-img img-fluid">
+                <figcaption class="figure-caption text-center">National Flag</figcaption>
+              </div>
+              <p id="wikiText" class="fs-6"></p>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <p class="fs-6 fw-light"><a href="" target="_blank" title="wiki link" id="wikiLink">Click here for more info</a></p>
           </div>
     </div>
 

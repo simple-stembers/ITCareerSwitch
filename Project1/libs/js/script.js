@@ -129,7 +129,7 @@ var airports = L.markerClusterGroup({
 $(document).ready(function(){
 
     map= L.map('map', {
-        layers: [minimal]
+        layers: [minimal, cities]
         })
         .locate({setView: true, maxZoom: 6});
     
@@ -238,6 +238,9 @@ $('#toAmount').on('change', function() {
     $('#fromAmount').val(numeral(reexchangeMoney(toAmountValue)).format('0.00'));
 });
 
+$('#currencyModal').on('hidden.bs.modal', function() {
+  $('#fromAmount').val(1);
+});
 //weather modal
 
 $('#weatherModal').on('show.bs.modal', function() {
@@ -287,12 +290,19 @@ $('#newsModal').on('hidden.bs.modal', function() {
 $('#wikiModal').on('show.bs.modal', function() {
 
     getWiki();
+    $("#flagImg").attr("src", "https://flagcdn.com/256x192/" + selectedCountryCode.toLowerCase() + ".png");
+    $("#flagImg").attr("alt", selectedCountryName + " flag");
+    $("#wikiLink").attr("href", "https://en.wikipedia.org/wiki/" + encodeURIComponent(selectedCountryName));
+
 });
 
 $('#wikiModal').on('hidden.bs.modal', function() {
 
     $("#pre-load-wiki").removeClass("fadeOut");
-    $("#wikiFrame").attr("src", "");
+    $("#flagImg").attr("src", "");
+    
+    $("#flagImg").attr("alt", "flag");
+
 });
 
 
@@ -459,6 +469,8 @@ function getCurrency()  {
 
          exchangeRate = result.data.local / result.data.gbp;
           
+         fromAmountValue= parseFloat($('#fromAmount').val());
+         $('#toAmount').val(numeral(exchangeMoney(fromAmountValue)).format('0.00'));
          
         }
 
@@ -656,6 +668,25 @@ function getCountryInfo()   {
 };
 
 function getWiki()   {
-  $('#wikiFrame').attr("src", "https://en.wikipedia.org/wiki/" + encodeURIComponent(selectedCountryName));
-  $('#pre-load-wiki').addClass("fadeOut");
+
+    $.ajax({
+      type: 'POST',
+      url: 'libs/php/getWiki.php',
+      dataType: 'json',
+      data: { 
+        country: encodeURIComponent(selectedCountryName)
+      },
+      success: function(result) {
+
+        if (result.status.code === "200") {
+          $('#wikiText').html(result.data.replace(/\n/g, '<br><br>'));
+          $('#pre-load-wiki').addClass("fadeOut");
+        } 
+        else {
+          $('#wikiText').html('Error loading content');
+         $('#pre-load-wiki').addClass("fadeOut");
+      }
+    }
+    })
+
 }

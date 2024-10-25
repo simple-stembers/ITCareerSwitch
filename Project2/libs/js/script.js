@@ -207,7 +207,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
           
           
   
-          $("#editPersonnelPersonnelID").val(result.data.personnel[0].id);
+          $("#editPersonnelID").val(result.data.personnel[0].id);
   
           $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
           $("#editPersonnelLastName").val(result.data.personnel[0].lastName);

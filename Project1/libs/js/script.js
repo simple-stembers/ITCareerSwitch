@@ -467,7 +467,7 @@ function getCurrency()  {
          
 
 
-         exchangeRate = result.data.local / result.data.gbp;
+         exchangeRate = result.data.local;
           
          fromAmountValue= parseFloat($('#fromAmount').val());
          $('#toAmount').val(numeral(exchangeMoney(fromAmountValue)).format('0.00'));

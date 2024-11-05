@@ -20,7 +20,7 @@ if (mysqli_connect_errno()) {
 }
 
 // Check if there are departments assigned to the location
-$checkQuery = $conn->prepare('SELECT COUNT(*) as departmentCount FROM department WHERE locationID = ?');
+$checkQuery = $conn->prepare('SELECT COUNT(id) as departmentCount FROM department WHERE locationID = ?');
 $checkQuery->bind_param("i", $_REQUEST['id']);
 $checkQuery->execute();
 $checkQuery->bind_result($departmentCount);

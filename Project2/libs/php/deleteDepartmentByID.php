@@ -20,7 +20,7 @@ if (mysqli_connect_errno()) {
 }
 
 // Check if there are employees assigned to the department
-$checkQuery = $conn->prepare('SELECT COUNT(*) as employeeCount FROM personnel WHERE departmentID = ?');
+$checkQuery = $conn->prepare('SELECT COUNT(id) as employeeCount FROM personnel WHERE departmentID = ?');
 $checkQuery->bind_param("i", $_REQUEST['id']);
 $checkQuery->execute();
 $checkQuery->bind_result($employeeCount);

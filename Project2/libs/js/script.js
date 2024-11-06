@@ -54,16 +54,20 @@ $("#filterBtn").click(function () {
 
 $("#filterDepartment").change(function () {
 
+    $("#filterLocation").val("");
+
     filterTables();
-    updateFilterOptions();
+   
    
 
 });
 
 $("#filterLocation").change(function () {
 
+    $("#filterDepartment").val("");
+
     filterTables();
-    updateFilterOptions();
+   
 
 });
 
@@ -332,7 +336,7 @@ $("#editPersonnelModal").on("hidden.bs.modal", function () {
   $("#deletePersonnelModalBtn").on("click", function (e) {
     e.preventDefault();
 
-       
+
         $.ajax({
             url: "./libs/php/deletePersonnelByID.php",
             type: "POST",
@@ -944,6 +948,8 @@ function filterTables() {
             row.hide();
         }
     });
+
+
 };
 
 
@@ -965,13 +971,13 @@ function populateFilterDropdowns() {
                 });
 
                 // Populate department dropdown
-                $("#filterDepartment").empty().append('<option value="">Select Department</option>');
+                $("#filterDepartment").empty().append('<option value="">All</option>');
                 departments.forEach(function (department) {
                     $("#filterDepartment").append('<option value="' + department + '">' + department + '</option>');
                 });
 
                 // Populate location dropdown
-                $("#filterLocation").empty().append('<option value="">Select Location</option>');
+                $("#filterLocation").empty().append('<option value="">All</option>');
                 locations.forEach(function (location) {
                     $("#filterLocation").append('<option value="' + location + '">' + location + '</option>');
                 });
@@ -988,68 +994,7 @@ function populateFilterDropdowns() {
     });
 };
 
-function updateFilterOptions()  {
-    var selectedDepartment = $("#filterDepartment").val();
-    var selectedLocation = $("#filterLocation").val();
-   
 
-    $.ajax({
-        url: "./libs/php/getAll.php",
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-            if (response.status.code === "200") {
-                var departments = new Set();
-                var locations = new Set();
-               
-
-                response.data.forEach(function (item) {
-                    if ((selectedDepartment === "" || item.department === selectedDepartment) &&
-                        (selectedLocation === "" || item.location === selectedLocation) ) {
-                        departments.add(item.department);
-                        locations.add(item.location);
-                        
-                    }
-                });
-
-                // Update department dropdown
-                $("#filterDepartment").empty().append('<option value="">Select Department</option>');
-                departments.forEach(function (department) {
-                    $("#filterDepartment").append('<option value="' + department + '">' + department + '</option>');
-                });
-
-                // Update location dropdown
-                $("#filterLocation").empty().append('<option value="">Select Location</option>');
-                locations.forEach(function (location) {
-                    $("#filterLocation").append('<option value="' + location + '">' + location + '</option>');
-                });
-
-              
-               
-
-                // Restore selected values
-                $("#filterDepartment").val(selectedDepartment);
-                $("#filterLocation").val(selectedLocation);
-                
-                if (selectedDepartment !== "") {
-                    var firstLocationValue = $("#filterLocation option:eq(1)").val(); // Get the value of the first option (excluding the default)
-                    if (firstLocationValue) {
-                        $("#filterLocation").val(firstLocationValue); // Set the location dropdown to the first value
-                    }
-                } 
-                else {
-                    $("#filterLocation").val(selectedLocation);
-                }
-
-            } else {
-                alert("Error: Unable to fetch data.");
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert("AJAX call failed: " + textStatus);
-        }
-    });
-};
 
 function populateDeletePersonnelName(personnelID) {
     

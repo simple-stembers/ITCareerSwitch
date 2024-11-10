@@ -4,6 +4,9 @@
 
 var sortOrder = {};
 
+let setFilterLocation = '';
+let setFilterDepartment = '';
+
 //-------------------------------------------------------
 //EVENT HANDLERS
 //-------------------------------------------------------
@@ -48,6 +51,9 @@ $("#filterBtn").click(function () {
     
     populateFilterDropdowns();
 
+    $("#filterLocation").val(setFilterLocation);
+    $("#filterDepartment").val(setFilterDepartment);
+
     $("#filterModal").modal("show");
     
 });
@@ -55,7 +61,8 @@ $("#filterBtn").click(function () {
 $("#filterDepartment").change(function () {
 
     $("#filterLocation").val("");
-
+    setFilterDepartment = $("#filterDepartment").val();
+    setFilterLocation = "";
     filterTables();
    
    
@@ -65,11 +72,15 @@ $("#filterDepartment").change(function () {
 $("#filterLocation").change(function () {
 
     $("#filterDepartment").val("");
-
+    setFilterLocation = $("#filterLocation").val();
+    setFilterDepartment = "";
     filterTables();
    
 
 });
+
+
+
 
 
 
@@ -970,19 +981,23 @@ function populateFilterDropdowns() {
                     
                 });
 
+                let sortedDepartments = Array.from(departments).sort();
+                let sortedLocations = Array.from(locations).sort();
+
                 // Populate department dropdown
                 $("#filterDepartment").empty().append('<option value="">All</option>');
-                departments.forEach(function (department) {
+                sortedDepartments.forEach(function (department) {
                     $("#filterDepartment").append('<option value="' + department + '">' + department + '</option>');
                 });
 
                 // Populate location dropdown
                 $("#filterLocation").empty().append('<option value="">All</option>');
-                locations.forEach(function (location) {
+                sortedLocations.forEach(function (location) {
                     $("#filterLocation").append('<option value="' + location + '">' + location + '</option>');
                 });
 
-                
+                $("#filterDepartment").val(setFilterDepartment);
+                $("#filterLocation").val(setFilterLocation);
               
             } else {
                 alert("Error: Unable to fetch data.");
